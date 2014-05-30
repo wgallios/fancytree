@@ -98,14 +98,18 @@ $.ui.fancytree.registerExtension({
 		res = this._super(ctx);
 
 		if( !instOpts.cheap ) {
-			margin = instOpts.margin;
 			ofs = (node.getLevel() - 1) * inst.levelOfs + inst.lineOfs;
 			$(node.span).find(".fancytree-title").css({
-				width: cw - margin.left - margin.right - ofs,
-				marginLeft:  -ofs + margin.left,
-				paddingLeft: +ofs - margin.left + inst.titlePadding,
-				paddingRight: inst.titlePadding
+				paddingLeft: +ofs,
 			});
+			// margin = instOpts.margin;
+			// ofs = (node.getLevel() - 1) * inst.levelOfs + inst.lineOfs;
+			// $(node.span).find(".fancytree-title").css({
+			// 	width: cw - margin.left - margin.right - ofs,
+			// 	marginLeft:  -ofs + margin.left,
+			// 	paddingLeft: +ofs - margin.left + inst.titlePadding,
+			// 	paddingRight: inst.titlePadding
+			// });
 		}
 		return res;
 	}
