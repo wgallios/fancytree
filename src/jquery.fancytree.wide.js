@@ -89,10 +89,10 @@ $.ui.fancytree.registerExtension({
 		this._super(ctx);
 	},
 	nodeRenderTitle: function(ctx) {
-		var ofs, res, margin,
+		var ofs, res, //margin,
 			instOpts = ctx.options.wide,
 			inst = this._local,
-			cw = inst.contWidth,
+			//cw = inst.contWidth,
 			node = ctx.node;
 
 		res = this._super(ctx);
@@ -100,7 +100,7 @@ $.ui.fancytree.registerExtension({
 		if( !instOpts.cheap ) {
 			ofs = (node.getLevel() - 1) * inst.levelOfs + inst.lineOfs;
 			$(node.span).find(".fancytree-title").css({
-				paddingLeft: +ofs,
+				paddingLeft: +ofs +  inst.titlePadding
 			});
 			// margin = instOpts.margin;
 			// ofs = (node.getLevel() - 1) * inst.levelOfs + inst.lineOfs;
