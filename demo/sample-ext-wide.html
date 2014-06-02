@@ -26,7 +26,7 @@
 .fancytree-container {
 /*	display: inline-block;*/
 	/*width: 200px;*/
-	height: 200px;
+	height: 250px;
 	overflow: auto;
 }
 </style>
@@ -34,23 +34,7 @@
 <!-- Add code to initialize the tree when the document is loaded: -->
 <script type="text/javascript">
 	$(function(){
-		// Attach the fancytree widget to an existing <div id="tree"> element
-		// and pass the tree options as an argument to the fancytree() function:
 		$("#tree").fancytree({
-			extensions: ["dnd", "wide"],
-			checkbox: true,
-			source: {url: "ajax-tree-local.json"},
-			dnd: {
-				dragStart: function() {}
-			},
-			wide: {
-				cheap: true
-			},
-			lazyLoad: function(event, data) {
-				data.result = {url: "ajax-sub2.json"}
-			}
-		});
-		$("#tree2").fancytree({
 			extensions: ["wide"],
 			checkbox: true,
 			source: {url: "ajax-tree-local.json"},
@@ -81,7 +65,7 @@
 		// 	window.console.log("width", contWidth, parseFloat(tree.$container.css("width"), 10), tree.$container.outerWidth());
 		// 	window.console.log("ofs", ofs);
 		});
-		$("#tree3").fancytree({
+		$("#tree2").fancytree({
 			extensions: [],
 			checkbox: true,
 			source: {url: "ajax-tree-local.json"},
@@ -98,13 +82,13 @@
 		// 	$(".fancytree-container").toggleClass("fancytree-ext-wide", $(this).is(":checked"));
 		// }).prop("checked", true);
 
-		addSampleButton({
-			label: "wideUpdate",
-			newline: false,
-			code: function(){
-				$("#tree2").fancytree("getTree").wideUpdate();
-			}
-		});
+		// addSampleButton({
+		// 	label: "wideUpdate",
+		// 	newline: false,
+		// 	code: function(){
+		// 		$("#tree2").fancytree("getTree").wideUpdate();
+		// 	}
+		// });
 
 	});
 </script>
@@ -129,8 +113,6 @@
 	<div id="tree">
 	</div>
 	<div id="tree2">
-	</div>
-	<div id="tree3">
 	</div>
 
 	<!-- Start_Exclude: This block is not part of the sample code -->
