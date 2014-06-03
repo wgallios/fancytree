@@ -8,6 +8,7 @@
 @fancy-use-sprites: true;      // false: suppress all background positions
 @fancy-hide-connectors: true;  // false: show vertical connector lines
 
+@fancy-level-indent: 16px;
 @fancy-line-height: 16px;      // height of a nodes selection bar including borders
 @fancy-node-v-spacing: 1px;    // gap between two node borders
 @fancy-icon-width: 16px;
@@ -92,7 +93,7 @@ ul.fancytree-container {
 	min-height: 0%; // #192
 	position: relative; // #235
 	ul {
-		padding: 0 0 0 16px;
+		padding: 0 0 0 @fancy-level-indent;
 		margin: 0;
 	}
 	li {
