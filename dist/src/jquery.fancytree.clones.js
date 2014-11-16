@@ -9,8 +9,8 @@
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
  *
- * @version 2.1.0
- * @date 2014-05-29T16:44
+ * @version 2.4.1
+ * @date 2014-09-23T19:33
  */
 
 ;(function($, window, document, undefined) {
@@ -20,13 +20,7 @@
 /*******************************************************************************
  * Private functions and variables
  */
-function _assert(cond, msg){
-	// TODO: see qunit.js extractStacktrace()
-	if(!cond){
-		msg = msg ? ": " + msg : "";
-		$.error("Assertion failed" + msg);
-	}
-}
+var _assert = $.ui.fancytree.assert;
 
 
 /* Return first occurrence of member from array. */
@@ -206,7 +200,6 @@ $.ui.fancytree._FancytreeNodeClass.prototype.isClone = function(){
 
 /**
  * [ext-clones] Update key and/or refKey for an existing node.
- * @param {FancytreeNode} [node]
  * @param {string} key
  * @param {string} refKey
  * @returns {boolean}
@@ -231,7 +224,7 @@ $.ui.fancytree._FancytreeNodeClass.prototype.reRegister = function(key, refKey){
 	// Key has changed: update all references
 	if( key != null && key !== this.key ) {
 		if( keyMap[key] ) {
-			$.error("[ext-clones] reRegister(" + key + "): already exists.");
+			$.error("[ext-clones] reRegister(" + key + "): already exists: " + this);
 		}
 		// Update keyMap
 		delete keyMap[prevKey];
@@ -351,6 +344,11 @@ $.ui.fancytree.registerExtension({
 		// The default implementation loads initial data
 		this._super(ctx);
 	},
+	treeClear: function(ctx){
+		ctx.tree.refMap = {};
+		ctx.tree.keyMap = {};
+		return this._super(ctx);
+	},
 	treeRegisterNode: function(ctx, add, node) {
 		var refList, len,
 			tree = ctx.tree,
@@ -367,7 +365,7 @@ $.ui.fancytree.registerExtension({
 
 		if( add ) {
 			if( keyMap[node.key] != null ) {
-				$.error("clones.treeRegisterNode: node.key already exists: " + node.key);
+				$.error("clones.treeRegisterNode: node.key already exists: " + node);
 			}
 			keyMap[key] = node;
 			if( refKey ) {

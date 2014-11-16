@@ -23,13 +23,6 @@ module.exports = (grunt) ->
                 "<%= pkg.homepage ? '  * ' + pkg.homepage + '\\n' : '' %>" +
                 "  * Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;" +
                 " Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %> */\n"
-    bumpup:
-        options:
-            dateformat: "YYYY-MM-DD HH:mm"
-            normalize: true
-            updateProps: 
-                pkg: "package.json"
-        files: ["package.json", "bower.json", "fancytree.jquery.json"]
 
     checkrepo:
       beforeBump:
@@ -51,13 +44,13 @@ module.exports = (grunt) ->
         extMin:
             src: [ "build/jquery.fancytree.*.min.js" ]
 
-    compress:
-        dist:
-            options:
-                archive: "archive/<%= pkg.name %>-<%= pkg.version %>.zip"
-            files: [
-                {expand: true, cwd: "dist/", src: ["**/*"], dest: ""}
-                ]
+    # compress:
+    #     dist:
+    #         options:
+    #             archive: "archive/<%= pkg.name %>-<%= pkg.version %>.zip"
+    #         files: [
+    #             {expand: true, cwd: "dist/", src: ["**/*"], dest: ""}
+    #             ]
 
     concat:
         core:
@@ -77,7 +70,7 @@ module.exports = (grunt) ->
                 # "lib/intro.js"
                 "src/jquery.fancytree.js"
                 "src/jquery.fancytree.childcounter.js"
-#                "src/jquery.fancytree.clones.js"
+               "src/jquery.fancytree.clones.js"
 #                "src/jquery.fancytree.columnview.js"
                 "src/jquery.fancytree.dnd.js"
                 "src/jquery.fancytree.edit.js"
@@ -109,7 +102,7 @@ module.exports = (grunt) ->
                 "lib/intro.js"
                 "build/jquery.fancytree.min.js"
                 "build/jquery.fancytree.childcounter.min.js"
-#                "build/jquery.fancytree.clones.min.js"
+               "build/jquery.fancytree.clones.min.js"
 #                "build/jquery.fancytree.columnview.min.js"
                 "build/jquery.fancytree.dnd.min.js"
                 "build/jquery.fancytree.edit.min.js"
@@ -123,7 +116,7 @@ module.exports = (grunt) ->
 #                "src/jquery.fancytree.wide.js"
                 "lib/outro.js"
                 ]
-            dest: "build/<%= pkg.name %>-custom.min.js"
+            dest: "build/<%= pkg.name %>-all.min.js"
 
     connect:
         forever:
@@ -131,7 +124,7 @@ module.exports = (grunt) ->
                 port: 8080
                 base: "./"
                 keepalive: true
-        dev: # pass on, so subsequent tastks (like watch) can start
+        dev: # pass on, so subsequent tasks (like watch) can start
             options:
                 port: 8080
                 base: "./"
@@ -267,9 +260,10 @@ module.exports = (grunt) ->
         all:
             options:
                 urls: ["http://localhost:9999/test/unit/test-core.html"]
-                tunnelTimeout: 5
+                # tunnelTimeout: 5
                 build: process.env.TRAVIS_JOB_ID
-                concurrency: 3
+                # concurrency: 3
+                throttled: 10
                 browsers: [
                     { browserName: "chrome", platform: "Windows 7" }
                     { browserName: "firefox", platform: "Windows 7" }
@@ -284,13 +278,6 @@ module.exports = (grunt) ->
                     { browserName: "safari", platform: "OS X 10.8" }
                 ]
                 testname: "fancytree qunit tests"
-
-    tagrelease:
-        file: "package.json"
-        commit:  true
-        message: "Tagging the %version% release."
-        prefix:  "v"
-        annotate: true
 
     uglify:
         # build:
@@ -336,6 +323,24 @@ module.exports = (grunt) ->
             files: ["src/*.js", "test/unit/*.js"]
             tasks: ["jshint:beforeConcat"]
 
+    yabs:
+        release:
+            common: # defaults for all tools
+              manifests: ['package.json', 'bower.json', 'fancytree.jquery.json']
+            # The following tools are run in order:
+            run_test: { tasks: ['test'] }
+            check: { clean: true, branch: ['master'], canPush: true }
+            bump: {} # 'bump' also uses the increment mode `yabs:release:MODE`
+            run_build: { tasks: ['make_release'] }
+            commit: { add: '.' }
+            tag: {}
+            push: { tags: true, useFollowTags: true },
+            githubRelease:
+              repo: "mar10/fancytree"
+              draft: false
+            bump_develop: { inc: 'prepatch' }
+            commit_develop: { message: 'Bump prerelease ({%= version %}) [ci skip]' }
+            push_develop: {}
 
   # ----------------------------------------------------------------------------
 
@@ -386,16 +391,16 @@ module.exports = (grunt) ->
       ]
   
   grunt.registerTask "make_release", [
-      "checkrepo:beforeRelease"
+      # "checkrepo:beforeRelease"
       "exec:tabfix"
       "build"
       "clean:dist"
       "copy:dist"
       "clean:build"
       "replace:release"
-      "compress:dist"
-      "tagrelease"
-      "bumpup:prerelease"
+      # "compress:dist"
+      # "tagrelease"
+      # "bumpup:prerelease"
       ]
 
   grunt.registerTask "upload", [

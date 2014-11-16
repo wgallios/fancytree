@@ -9,8 +9,8 @@
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
  *
- * @version 2.1.0
- * @date 2014-05-29T16:44
+ * @version 2.4.1
+ * @date 2014-09-23T19:33
  */
 
 ;(function($, window, document, undefined) {
@@ -20,13 +20,16 @@
 /*******************************************************************************
  * Private functions and variables
  */
-// function _assert(cond, msg){
-// 	// TODO: see qunit.js extractStacktrace()
-// 	if(!cond){
-// 		msg = msg ? ": " + msg : "";
-// 		$.error("Assertion failed" + msg);
-// 	}
-// }
+// var _assert = $.ui.fancytree.assert;
+
+/* Calculate inner width without scrollbar */
+function realInnerWidth($el) {
+	// http://blog.jquery.com/2012/08/16/jquery-1-8-box-sizing-width-csswidth-and-outerwidth/
+//	inst.contWidth = parseFloat(this.$container.css("width"), 10);
+	// 'Client width without scrollbar' - 'padding'
+	return $el[0].clientWidth - ($el.innerWidth() -  parseFloat($el.css("width"), 10));
+}
+
 
 /**
  * [ext-wide] Recalculate the width of the selection bar after the tree container
@@ -42,7 +45,8 @@ $.ui.fancytree._FancytreeClass.prototype.wideUpdate = function(){
 		prevCw = inst.contWidth,
 		prevLo = inst.lineOfs;
 	// http://blog.jquery.com/2012/08/16/jquery-1-8-box-sizing-width-csswidth-and-outerwidth/
-	inst.contWidth = parseFloat(this.$container.css("width"), 10);
+//	inst.contWidth = parseFloat(this.$container.css("width"), 10);
+	inst.contWidth = realInnerWidth(this.$container);
 	// Each title is precceeded by 2 or 3 icons (16px + 3 margin)
 	//     + 1px title border and 3px title padding
 	inst.lineOfs = (this.options.checkbox ? 3 : 2) * 19;
@@ -71,7 +75,8 @@ $.ui.fancytree.registerExtension({
 		this.$container.addClass("fancytree-ext-wide");
 		this._super(ctx);
 		// http://blog.jquery.com/2012/08/16/jquery-1-8-box-sizing-width-csswidth-and-outerwidth/
-		this._local.contWidth = parseFloat(ctx.tree.$container.css("width"), 10);
+//		this._local.contWidth = parseFloat(ctx.tree.$container.css("width"), 10);
+		this._local.contWidth = realInnerWidth(ctx.tree.$container);
 		// Every nested UL is indented by 16px
 		// Each title is precceeded by 2 or 3 icons (16px + 3 margin)
 		//     + 1px title border and 3px title padding

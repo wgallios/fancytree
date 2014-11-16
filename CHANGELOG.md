@@ -1,8 +1,52 @@
-# 2.2.0 / Unreleased
+# 2.4.2-0 / Unreleased
+  * [Improved] Update to jQuery 1.1.11, jQuery UI 1.11.1
+  * [Improved] [ext-dnd] Make draggable helper and parent configurable
+  * [Improved] #153 Add class `fancytree-unselectable` to respective nodes and
+    dimm unselectable checkboxes
+  * [Fixed] #324 Fix problem where minExpandLevel was not expanding root node
+  * [Fixed] #300 dnd.focusOnClick for jQuery UI 1.11
+
+# 2.4.1 / 2014-09-23
+  * [Fixed] Regression #323
+
+# 2.4.0 / 2014-09-21
+  * [CHANGED] Renamed dist/jquery.fancytree-custom.min.js to jquery.fancytree-all.min.js
+  * [CHANGED] ext-edit callbacks no longer pass `data.value` (use `data.input.val()` instead).
+  * [Added] CDN support (http://www.jsdelivr.com/#!jquery.fancytree)
+  * [Added] New method `node.visitAndLoad()`
+  * [Added] New method `node.editCreateNode()` (ext-edit)
+  * [Added] New method `node.isRootNode()`
+  * [Added] New method `node.isTopLevel()`
+  * [Added] New option `id` to override default tree id
+  * [Added] New argument `stopOnParents` for tree.generateFormElements()
+  * [Improved] #294 node.load() should resolve 'ok', if node is already loaded
+  * [Improved] #293 minExpandLevel does not auto-expand
+  * [Improved] #313 Allow HTML in tooltips
+  * [Fixed] crash in scrollIntoView() when parent is `window`
+  * [Fixed] #305 Checkbox doesn't show with Glyph + Table
+  * [Fixed] #316 Fix hasChildren() when children = []
+  * [Fixed] #237 ajax LoadError not updated in StatusNode with Table ext
+  * [Fixed] #295 loadKeyPath with multiple paths
+  * [Deprecated] node.isRoot(). Use node.isRootNode() instead
+
+# 2.3.0 / 2014-08-17
+  * [CHANGED] renamed (undocumented) event 'loaderror' to 'loadError'
+  * [Added] postProcess now allows to signal error conditions (so it becomes easy to handle custom ajax response formats)
+  * [Added] node.setStatus()
+  * [Added] ext-clones to the standard distribution.
+  * [Improved] loadError allows to return `false` to prevent default handling
+  * [Fixed] #258 Fix moveTo when moving a node to same parent
+  * [Fixed] #257 Glyph expander sometimes disappears
+
+# 2.2.0 / 2014-06-28
+  * [Added] Option dnd.focusOnClick sets focus to tree widget, even when dragging 
+    is enabled
+  * [Added] node.info()
   * [Improved] #245 tree.generateInput() now returns data using PHPs array
     convention, i.e. by appending brackets to the name: 'ft_1[]'.
-  * [Fixed] #250: Children lazy empty nodes remain checked when parent is unchecked with hierarchical multi-selection
-
+  * [Fixed] #250: Children lazy empty nodes remain checked when parent is 
+    unchecked with hierarchical multi-selection
+  * [Fixed] #272 Navigation in filtered trees
 
 # 2.1.0 / 2014-05-29
   * [Added] #210: [ext-persist] optionally store information in sessionStorage or localStorage

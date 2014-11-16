@@ -27,14 +27,10 @@ function _getIcon(opts, type){
 
 $.ui.fancytree.registerExtension({
 	name: "glyph",
-	version: "0.1.0",
+	version: "0.2.0",
 	// Default options for this extension.
 	options: {
-		prefix: "icon-",
-		extra: null,
 		map: {
-			doc: "icon-file-alt",
-			docOpen: "icon-file-alt",
 			checkbox: "icon-check-empty",
 			checkboxSelected: "icon-check",
 			checkboxUnknown: "icon-check icon-muted",
@@ -42,12 +38,16 @@ $.ui.fancytree.registerExtension({
 			expanderClosed: "icon-caret-right",
 			expanderLazy: "icon-angle-right",
 			expanderOpen: "icon-caret-down",
-			folder: "icon-folder-close-alt",
-			folderOpen: "icon-folder-open-alt",
+			doc: "icon-file-alt",
+			noExpander: "",
+			// Default node icons.
+			// (Use tree.options.iconClass(node) callback to define custom icons
+			// based on node data)
+			docOpen: "icon-file-alt",
 			loading: "icon-refresh icon-spin",
-			noExpander: ""
-		},
-		icon: null // TODO: allow callback here
+			folder: "icon-folder-close-alt",
+			folderOpen: "icon-folder-open-alt"
+		}
 	},
 
 	treeInit: function(ctx){
@@ -58,10 +58,10 @@ $.ui.fancytree.registerExtension({
 	nodeRenderStatus: function(ctx) {
 		var icon, span,
 			node = ctx.node,
+			$span = $(node.span),
 			opts = ctx.options.glyph,
 			// callback = opts.icon,
 			map = opts.map
-			// prefix = opts.prefix
 			// $span = $(node.span)
 			;
 
@@ -70,8 +70,7 @@ $.ui.fancytree.registerExtension({
 		if( node.isRoot() ){
 			return;
 		}
-
-		span = $("span.fancytree-expander", node.span).get(0);
+		span = $span.children("span.fancytree-expander").get(0);
 		if( span ){
 			if( node.isLoading() ){
 				icon = "loading";
@@ -87,13 +86,19 @@ $.ui.fancytree.registerExtension({
 			span.className = "fancytree-expander " + map[icon];
 		}
 
-		span = $("span.fancytree-checkbox", node.tr || node.span).get(0);
+		if( node.tr ){
+			span = $("td", node.tr).children("span.fancytree-checkbox").get(0);
+		}else{
+			span = $span.children("span.fancytree-checkbox").get(0);
+		}
 		if( span ){
 			icon = node.selected ? "checkboxSelected" : (node.partsel ? "checkboxUnknown" : "checkbox");
 			span.className = "fancytree-checkbox " + map[icon];
 		}
 
-		span = $("span.fancytree-icon", node.span).get(0);
+		// Icon (note that this does not match .fancytree-custom-icon, that might
+		// be set by opts.iconClass)
+		span = $span.children("span.fancytree-icon").get(0);
 		if( span ){
 			if( node.folder ){
 				icon = node.expanded ? _getIcon(opts, "folderOpen") : _getIcon(opts, "folder");
